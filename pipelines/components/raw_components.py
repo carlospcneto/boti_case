@@ -24,8 +24,11 @@ def create_table_if_exists(project_id: str, dataset_id: str, table_id: str, sche
         client.create_dataset(dataset_ref, exists_ok=True)
         print(f"Dataset {dataset_id} criado com sucesso.")
     
+    
+    schema_objects = [bigquery.SchemaField(field['name'], field['type'], mode=field.get('mode', 'NULLABLE')) for field in schema]
+    
     table_ref = dataset_ref.table(table_id)
-    table = bigquery.Table(table_ref, schema=schema)
+    table = bigquery.Table(table_ref, schema=schema_objects)
 
     try:
         client.create_table(table, exists_ok=True)

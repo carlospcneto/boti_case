@@ -1,6 +1,6 @@
 from kfp import dsl
 from kfp.compiler import compiler
-from google.cloud import bigquery
+from google.cloud.bigquery import SchemaField
 from pipelines.components.raw_components import create_table_if_exists
 import pandas as pd
 
@@ -20,33 +20,33 @@ def preprocess_pipe(
             'dataset_id': 'raw_data',
             'table_id': 'customers',
             'schema': [
-                bigquery.SchemaField('customer_id', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('name', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('email', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('created_at', 'TIMESTAMP', mode='REQUIRED')
+                {'name': 'customer_id', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'name', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'email', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'created_at', 'type': 'TIMESTAMP', 'mode': 'REQUIRED'}
             ]        
         },
         {
             'dataset_id': 'raw_data',
             'table_id': 'orders',
             'schema': [
-                bigquery.SchemaField('order_id', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('customer_id', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('order_date', 'TIMESTAMP', mode='REQUIRED'),
-                bigquery.SchemaField('product_id', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('quantity', 'INTEGER', mode='REQUIRED'),
-                bigquery.SchemaField('price', 'FLOAT', mode='REQUIRED')
+                {'name': 'order_id', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'customer_id', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'order_date', 'type': 'TIMESTAMP', 'mode': 'REQUIRED'},
+                {'name': 'product_id', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'quantity', 'type': 'INTEGER', 'mode': 'REQUIRED'},
+                {'name': 'price', 'type': 'FLOAT', 'mode': 'REQUIRED'}
             ]
         },
         {
             'dataset_id': 'raw_data',
             'table_id': 'products',
             'schema': [
-                bigquery.SchemaField('product_id', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('name', 'STRING', mode='REQUIRED'),
-                bigquery.SchemaField('description', 'STRING', mode='NULLABLE'),
-                bigquery.SchemaField('price', 'FLOAT', mode='REQUIRED'),
-                bigquery.SchemaField('dt_refe', 'STRING', mode='REQUIRED'),
+                {'name': 'product_id', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'name', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'description', 'type': 'STRING', 'mode': 'NULLABLE'},
+                {'name': 'price', 'type': 'FLOAT', 'mode': 'REQUIRED'},
+                {'name': 'dt_refe', 'type': 'STRING', 'mode': 'REQUIRED'},
             ]
         }
     ]
