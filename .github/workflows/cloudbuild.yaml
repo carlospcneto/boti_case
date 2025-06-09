@@ -1,6 +1,6 @@
 name: Deploy na GCP
 on:
-  pull_request:
+  push:
     branches:
       - main
   workflow_dispatch:
@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
-      
+
     steps:
       - id: 'checkout'
         name: Checkout code
