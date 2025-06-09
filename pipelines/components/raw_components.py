@@ -34,29 +34,29 @@ def create_table(project_id: str, dataset_id: str, table_id: str, schema: dict):
         print(f"Erro ao criar a tabela {table_id}: {e}")
         raise e
 
-@dsl.component(
-    base_image=BASE_IMAGE
-)
-def insert_data(project_id: str, dataset_id: str, table_id: str, data, end_date: str):
-    """
-    Insere dados na tabela do BigQuery.
-    """
-    from google.cloud import bigquery
-    import pandas as pd
+# @dsl.component(
+#     base_image=BASE_IMAGE
+# )
+# def insert_data(project_id: str, dataset_id: str, table_id: str, data, end_date: str):
+#     """
+#     Insere dados na tabela do BigQuery.
+#     """
+#     from google.cloud import bigquery
+#     import pandas as pd
 
-    client = bigquery.Client(project=project_id)
-    table_ref = f"{project_id}.{dataset_id}.{table_id}"
+#     client = bigquery.Client(project=project_id)
+#     table_ref = f"{project_id}.{dataset_id}.{table_id}"
 
-    end_date = end_date[:10]
+#     end_date = end_date[:10]
 
-    data = data[data['dt_refe_crga'] == end_date]
+#     data = data[data['dt_refe_crga'] == end_date]
 
-    data = data.drop(columns=['dt_refe_crga']).to_dict(orient='records')
+#     data = data.drop(columns=['dt_refe_crga']).to_dict(orient='records')
    
-    errors = client.insert_rows_json(table_ref, data)
+#     errors = client.insert_rows_json(table_ref, data)
     
-    if errors:
-        print(f"Erro ao inserir dados na tabela {table_id}: {errors}")
-        raise Exception(f"Erro ao inserir dados: {errors}")
-    else:
-        print(f"Dados inseridos com sucesso na tabela {table_id}.")
+#     if errors:
+#         print(f"Erro ao inserir dados na tabela {table_id}: {errors}")
+#         raise Exception(f"Erro ao inserir dados: {errors}")
+#     else:
+#         print(f"Dados inseridos com sucesso na tabela {table_id}.")
