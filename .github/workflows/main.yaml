@@ -1,0 +1,31 @@
+name: Deploy na GCP
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Auth on Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CPCN_KEY }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Compile KFP pipeline
+        run: |
+          pip install kfp google-cloud-aiplatform
+          python pipelines/pipe-preprocess.py
+      
+      - name: Execute on Vertex AI
+        uses: google-github-actions/run-vertex-ai-pipeline@v1
+        with:
+          pipeline_spec_path: pipelines/preprocess_pipe.yaml
+          location: 'us-central1'
