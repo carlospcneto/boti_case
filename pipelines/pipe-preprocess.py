@@ -1,7 +1,7 @@
 from kfp import dsl
 from kfp.compiler import compiler
 from google.cloud import bigquery
-from pipelines.components.raw_components import create_table, insert_data
+from pipelines.components.raw_components import create_table
 import pandas as pd
 
 @dsl.pipeline(
