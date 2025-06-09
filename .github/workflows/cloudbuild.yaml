@@ -10,7 +10,7 @@ env:
   GCP_REGION: 'us-central1'
   PIPELINE_NAME: 'pipe-preprocess'
   PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn'
-
+  ARTIFACT_REPO: 'docker-repo-cpcn' 
 jobs:
   build-and-deploy:
     runs-on: 'ubuntu-latest'
@@ -29,7 +29,19 @@ jobs:
         with:
           workload_identity_provider: 'projects/398112472826/locations/global/workloadIdentityPools/github-pool-identitys/providers/github'
           service_account: 'service-cpcn@boti-project-cpcn.iam.gserviceaccount.com'
-        
+      
+      - id: 'configure-docker' 
+        name: Configure Docker
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+
+      - id: 'build-and-push-image'
+        name: Build and Push Docker Image
+        run: |          
+          export IMAGE_URI=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/preprocess-image:${{ github.sha }}
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+
       - id: 'setup-gcloud'
         name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
@@ -48,6 +60,8 @@ jobs:
       
       - id: 'compile-kbfp'
         name: Compile Kubeflow Pipeline
+        end:
+           IMAGE_URI: ${{ env.IMAGE_URI }}
         run: python pipelines/pipe-preprocess.py
       
       - id: 'run-pipeline'

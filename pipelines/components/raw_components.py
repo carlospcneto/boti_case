@@ -1,8 +1,10 @@
+import os
 from kfp import dsl
 
+BASE_IMAGE = os.getenv('IMAGE_URI')
+
 @dsl.component(
-    base_image='python:3.10',
-    packages_to_install=['google-cloud-bigquery==3.34.0']
+    base_image=BASE_IMAGE
 )
 def create_table(project_id: str, dataset_id: str, table_id: str, schema: dict):
     """
@@ -33,9 +35,7 @@ def create_table(project_id: str, dataset_id: str, table_id: str, schema: dict):
         raise e
 
 @dsl.component(
-    base_image='python:3.10',
-    packages_to_install=['google-cloud-bigquery==3.34.0',
-                         'pandas==2.3.0']
+    base_image=BASE_IMAGE
 )
 def insert_data(project_id: str, dataset_id: str, table_id: str, data, end_date: str):
     """
