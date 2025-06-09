@@ -60,7 +60,7 @@ jobs:
       
       - id: 'compile-kbfp'
         name: Compile Kubeflow Pipeline
-        end:
+        env:
            IMAGE_URI: ${{ env.IMAGE_URI }}
         run: python pipelines/pipe-preprocess.py
       
