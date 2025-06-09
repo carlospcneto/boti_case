@@ -1,7 +1,7 @@
 from kfp import dsl
 from kfp.compiler import compiler
 from google.cloud import bigquery
-from pipelines.components.raw_components import create_table
+from pipelines.components.raw_components import create_table_if_exists
 import pandas as pd
 
 @dsl.pipeline(
@@ -53,7 +53,7 @@ def preprocess_pipe(
 
     for table in schemas_tables:
 
-        create_table_op = create_table(
+        create_table_op = create_table_if_exists(
             project_id=project_id,
             dataset_id=table['dataset_id'],
             table_id=table['table_id'],
