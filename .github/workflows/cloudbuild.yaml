@@ -27,8 +27,8 @@ jobs:
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          workload_identity_provider: principal://iam.googleapis.com/projects/398112472826/locations/global/workloadIdentityPools/github-pool-identitys/subject/SUBJECT_ATTRIBUTE_VALUE
+          service_account: service-cpcn@boti-project-cpcn.iam.gserviceaccount.com
         
       - id: 'setup-gcloud'
         name: Set up Cloud SDK
@@ -58,6 +58,6 @@ jobs:
             --location=${{ env.GCP_REGION }} \
             --display-name=${{ env.PIPELINE_NAME }}-$(date +%Y%m%d%H%M%S) \
             --pipeline-spec-path=preprocess_pipe.yaml \
-            --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
+            --service-account=service-cpcn@boti-project-cpcn.iam.gserviceaccount.com \
             --pipeline-root=${{ env.PIPELINE_ROOT }}
         
