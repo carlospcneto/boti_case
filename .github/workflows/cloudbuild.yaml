@@ -1,18 +1,63 @@
 name: Deploy na GCP
 on:
-  pull_request:
+  push:
     branches:
       - main
   workflow_dispatch:
 
+env:
+  GCP_PROJECT_ID: 'boti-project-cpcn'
+  GCP_REGION: 'us-central1'
+  PIPELINE_NAME: 'pipe-preprocess'
+  PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn' # Bucket para os artefatos da pipeline
+
 jobs:
   build-and-deploy:
     runs-on: 'ubuntu-latest'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
-      - name: Auth on Google Cloud
-        uses: google-github-actions/auth@v1
+    steps:
+      - id: 'checkout'
+        name: Checkout code
+        uses: actions/checkout@v4
+
+      - id: 'auth' 
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GOOGLE_CPCN_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+        
+      - id: 'setup-gcloud'
+        name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v1'
+      
+      - id: 'setup-python'
+        name: 'Set up Python'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      
+      - id: 'install-dependencies'
+        name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - id: 'compile-kbfp'
+        name: Compile Kubeflow Pipeline
+        run: python pipelines/pipe-preprocess.py
+      
+      - id: 'run-pipeline'
+        name: Run Kubeflow Pipeline
+        run: |
+          gcloud ai pipelines run \
+            --project=${{ env.GCP_PROJECT_ID }} \
+            --location=${{ env.GCP_REGION }} \
+            --display-name=${{ env.PIPELINE_NAME }}-$(date +%Y%m%d%H%M%S) \
+            --pipeline-spec-path=preprocess_pipe.yaml \
+            --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
+            --pipeline-root=${{ env.PIPELINE_ROOT }}
+        
