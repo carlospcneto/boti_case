@@ -1,7 +1,7 @@
 from kfp import dsl
 
 @dsl.component(
-    base_image='python:3.13.4',
+    base_image='python:3.10',
     packages_to_install=['google-cloud-bigquery==3.34.0']
 )
 def create_table(project_id: str, dataset_id: str, table_id: str, schema: dict):
@@ -33,7 +33,7 @@ def create_table(project_id: str, dataset_id: str, table_id: str, schema: dict):
         raise e
 
 @dsl.component(
-    base_image='python:3.13.4',
+    base_image='python:3.10',
     packages_to_install=['google-cloud-bigquery==3.34.0',
                          'pandas==2.3.0']
 )

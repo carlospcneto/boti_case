@@ -9,7 +9,7 @@ env:
   GCP_PROJECT_ID: 'boti-project-cpcn'
   GCP_REGION: 'us-central1'
   PIPELINE_NAME: 'pipe-preprocess'
-  PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn' # Bucket para os artefatos da pipeline
+  PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn'
 
 jobs:
   build-and-deploy:
@@ -27,8 +27,8 @@ jobs:
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: principal://iam.googleapis.com/projects/398112472826/locations/global/workloadIdentityPools/github-pool-identitys/subject/SUBJECT_ATTRIBUTE_VALUE
-          service_account: service-cpcn@boti-project-cpcn.iam.gserviceaccount.com
+          workload_identity_provider: 'projects/398112472826/locations/global/workloadIdentityPools/github-pool-identitys/providers/github'
+          service_account: 'service-cpcn@boti-project-cpcn.iam.gserviceaccount.com'
         
       - id: 'setup-gcloud'
         name: Set up Cloud SDK
@@ -38,7 +38,7 @@ jobs:
         name: 'Set up Python'
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'
+          python-version: '3.10' 
       
       - id: 'install-dependencies'
         name: Install dependencies
@@ -60,4 +60,3 @@ jobs:
             --pipeline-spec-path=preprocess_pipe.yaml \
             --service-account=service-cpcn@boti-project-cpcn.iam.gserviceaccount.com \
             --pipeline-root=${{ env.PIPELINE_ROOT }}
-        
