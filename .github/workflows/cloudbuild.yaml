@@ -9,7 +9,7 @@ env:
   GCP_PROJECT_ID: 'boti-project-cpcn'
   GCP_REGION: 'us-central1'
   PIPELINE_NAME: 'pipe-preprocess'
-  PIPELINE_ROOT: 'gs://seu-bucket-de-artifacts/pipeline-root' # Bucket para os artefatos da pipeline
+  PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn' # Bucket para os artefatos da pipeline
 
 jobs:
   build-and-deploy:
