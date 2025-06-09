@@ -6,7 +6,7 @@ BASE_IMAGE = os.getenv('IMAGE_URI')
 @dsl.component(
     base_image=BASE_IMAGE
 )
-def create_table(project_id: str, dataset_id: str, table_id: str, schema: dict):
+def create_table(project_id: str, dataset_id: str, table_id: str, schema: list):
     """
     Cria a tabela no BigQuery.
     """
