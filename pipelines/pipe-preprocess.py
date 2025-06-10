@@ -73,4 +73,4 @@ def preprocess_pipe(
 if __name__ == '__main__':
     compiler.Compiler().compile(
         pipeline_func=preprocess_pipe,
-        package_path='preprocess_pipe.yaml')
+        package_path='pipelines/pipe-preprocess.yaml')
