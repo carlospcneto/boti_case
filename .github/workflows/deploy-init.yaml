@@ -59,7 +59,7 @@ jobs:
 
   insert-data-bigquery:
     runs-on: ubuntu-latest
-    needs: create-bigquery-infra
+    # needs: create-bigquery-infra
     permissions:
       contents: 'read'
       id-token: 'write'
