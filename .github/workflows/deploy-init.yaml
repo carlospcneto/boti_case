@@ -1,4 +1,4 @@
-namename: Deploy dos Dados iniciais no BigQuery
+name: Deploy dos Dados iniciais no BigQuery
 on:
   workflow_dispatch:
 
