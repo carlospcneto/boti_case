@@ -12,12 +12,6 @@
     "description": "Id do cliente da compra."
   },
   {
-    "name": "order_date",
-    "type": "TIMESTAMP",
-    "mode": "REQUIRED",
-    "description": "Data e hora da compra."
-  },
-  {
     "name": "product_id",
     "type": "STRING",
     "mode": "REQUIRED",
@@ -34,5 +28,11 @@
     "type": "INTEGER",
     "mode": "REQUIRED",
     "description": "Quantidade de produtos comprados."
+  },
+  {
+    "name": "order_date",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Data e hora da compra."
   }
 ]
