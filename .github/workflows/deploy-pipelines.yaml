@@ -70,7 +70,7 @@ jobs:
       - id: 'upload-pipeline'
         name: Upload da pipeline para o Vertex AI
         run: |
-          python -m pipelines.main \
+          python pipelines/main.py \
             --project ${{ env.GCP_PROJECT_ID }} \
             --region ${{ env.GCP_REGION }} \
             --pipeline-root ${{ env.PIPELINE_ROOT }} \

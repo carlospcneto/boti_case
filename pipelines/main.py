@@ -7,7 +7,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Inicializa o AI Platform com parâmetros.")
     parser.add_argument("--project", type=str, default="boti-project-cpcn", help="ID do projeto GCP")
     parser.add_argument("--region", type=str, default="us-central1", help="Região do AI Platform")
-    parser.add_argument("--pipeline_root", type=str, default="gs://boti-project-cpcn/pipelines", help="Caminho raiz do pipeline no Cloud Storage")
+    parser.add_argument("--pipeline-root", type=str, default="gs://boti-project-cpcn/pipelines", help="Caminho raiz do pipeline no Cloud Storage")
 
 
     args = parser.parse_args()
