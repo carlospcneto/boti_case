@@ -11,7 +11,7 @@ env:
   PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn'
   ARTIFACT_REPO: 'docker-repo-cpcn' 
 jobs:
-  build-and-deploy:
+  stream-generator:
     runs-on: 'ubuntu-latest'
     permissions:
       contents: 'read'
