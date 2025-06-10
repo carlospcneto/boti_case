@@ -85,7 +85,7 @@ jobs:
           bq load \
             --source_format=CSV \
             --skip_leading_rows=1 \
-            --autodetect \
+            --schema=./bq-schemas/customers.json \
             "${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_customers" \
             "./data/raw/customers.csv"
 
@@ -95,7 +95,7 @@ jobs:
           bq load \
             --source_format=CSV \
             --skip_leading_rows=1 \
-            --autodetect \
+            --schema=./bq-schemas/orders.json \
             "${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_orders" \
             "./data/raw/orders.csv"
 
@@ -105,6 +105,6 @@ jobs:
           bq load \
             --source_format=CSV \
             --skip_leading_rows=1 \
-            --autodetect \
+            --schema=./bq-schemas/products.json \
             "${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_products" \
             "./data/raw/products.csv"
