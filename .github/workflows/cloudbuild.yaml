@@ -63,7 +63,10 @@ jobs:
         env:
            IMAGE_URI: ${{ env.IMAGE_URI }}
         run: python -m pipelines.pipe-preprocess
-      
+
+      - name: Update gcloud components
+        run: gcloud components update      
+        
       - id: 'run-pipeline'
         name: Run Kubeflow Pipeline
         run: |
