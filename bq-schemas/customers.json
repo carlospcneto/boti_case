@@ -1,0 +1,26 @@
+[
+  {
+    "name": "customer_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "ID exclusivo do cliente."
+  },
+  {
+    "name": "customer_name",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Nome do cliente."
+  },
+  {
+    "name": "customer_email",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Email do cliente."
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Data e hora de criação do registro do cliente."
+  }
+]

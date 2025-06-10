@@ -1,0 +1,38 @@
+[
+  {
+    "name": "order_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "ID da compra."
+  },
+  {
+    "name": "customer_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Id do cliente da compra."
+  },
+  {
+    "name": "order_date",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Data e hora da compra."
+  },
+  {
+    "name": "product_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "ID do produto comprado."
+  },
+  {
+    "name": "product_price",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "Preço pago por uma unidade do produto."
+  },  
+  {
+    "name": "order_quantity",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Quantidade de produtos comprados."
+  }
+]
