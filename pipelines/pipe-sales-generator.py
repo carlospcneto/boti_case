@@ -61,7 +61,7 @@ def main(argv=None):
     with beam.Pipeline(options=pipeline_options) as p:
 
         base_data_customers = p | 'ReadFromBigQuery' >> beam.io.ReadFromBigQuery(table='raw_data.tb_customers')
-        base_data_products = p | 'ReadFromBigQuery' >> beam.io.ReadFromBigQuery(table='raw_data.tb_customers')
+        base_data_products = p | 'ReadFromBigQuery2' >> beam.io.ReadFromBigQuery(table='raw_data.tb_customers')
 
         latest_modifier_map = (
             p
