@@ -8,54 +8,54 @@ env:
   BQ_DATASET: 'raw_data'
  
 jobs:
-  create-bigquery-infra:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    steps:
-      - id: 'checkout'
-        name: Checkout code
-        uses: actions/checkout@v4
+  # create-bigquery-infra:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: 'read'
+  #     id-token: 'write'
+  #   steps:
+  #     - id: 'checkout'
+  #       name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - id: 'auth' 
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+  #     - id: 'auth' 
+  #       name: Authenticate to Google Cloud
+  #       uses: google-github-actions/auth@v2
+  #       with:
+  #         workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+  #         service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      - id: 'setup-gcloud'
-        name: Set up Cloud SDK
-        uses: 'google-github-actions/setup-gcloud@v2'
+  #     - id: 'setup-gcloud'
+  #       name: Set up Cloud SDK
+  #       uses: 'google-github-actions/setup-gcloud@v2'
 
-      - id: 'create-dataset'
-        name: 'Create BigQuery Dataset'
-        run: |
-          bq --location=${{ env.GCP_REGION }} mk --dataset \
-          --description="Dataset para os dados brutos." \
-          ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}
+  #     - id: 'create-dataset'
+  #       name: 'Create BigQuery Dataset'
+  #       run: |
+  #         bq --location=${{ env.GCP_REGION }} mk --dataset \
+  #         --description="Dataset para os dados brutos." \
+  #         ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}
       
-      - id: 'create-table-customers'
-        name: 'Create BigQuery Table Customers'
-        run: |
-          bq mk --table --description="Tabela de Clientes." \
-          ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_customers \
-          ./bq-schemas/customers.json
+  #     - id: 'create-table-customers'
+  #       name: 'Create BigQuery Table Customers'
+  #       run: |
+  #         bq mk --table --description="Tabela de Clientes." \
+  #         ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_customers \
+  #         ./bq-schemas/customers.json
 
-      - id: 'create-table-orders'
-        name: 'Create BigQuery Table Orders'
-        run: |     
-          bq mk --table --description="Tabela de Produtos." \
-          ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_orders \
-          ./bq-schemas/orders.json
+  #     - id: 'create-table-orders'
+  #       name: 'Create BigQuery Table Orders'
+  #       run: |     
+  #         bq mk --table --description="Tabela de Produtos." \
+  #         ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_orders \
+  #         ./bq-schemas/orders.json
       
-      - id: 'create-table-products'
-        name: 'Create BigQuery Table Products'
-        run: |
-          bq mk --table --description="Tabela de Produtos." \
-          ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_products \
-          ./bq-schemas/products.json
+  #     - id: 'create-table-products'
+  #       name: 'Create BigQuery Table Products'
+  #       run: |
+  #         bq mk --table --description="Tabela de Produtos." \
+  #         ${{ env.GCP_PROJECT_ID }}:${{ env.BQ_DATASET }}.tb_products \
+  #         ./bq-schemas/products.json
 
   insert-data-bigquery:
     runs-on: ubuntu-latest

@@ -1,77 +1,77 @@
-name: Deploy Kubeflow Pipelines to Google Cloud Vertex AI
-on:
-  push:
-    branches:
-      - main
-    path:
-      - 'pipelines/**'
-      - 'components/**'
-  workflow_dispatch:
+# name: Deploy Kubeflow Pipelines to Google Cloud Vertex AI
+# on:
+#   push:
+#     branches:
+#       - main
+#     path:
+#       - 'pipelines/**'
+#       - 'components/**'
+#   workflow_dispatch:
 
-env:
-  GCP_PROJECT_ID: 'boti-project-cpcn'
-  GCP_REGION: 'us-central1'
-  PIPELINE_NAME: 'pipe-preprocess'
-  PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn'
-  ARTIFACT_REPO: 'docker-repo-cpcn' 
-jobs:
-  build-and-deploy:
-    runs-on: 'ubuntu-latest'
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+# env:
+#   GCP_PROJECT_ID: 'boti-project-cpcn'
+#   GCP_REGION: 'us-central1'
+#   PIPELINE_NAME: 'pipe-preprocess'
+#   PIPELINE_ROOT: 'gs://bucket-vertex-mlops-cpcn'
+#   ARTIFACT_REPO: 'docker-repo-cpcn' 
+# jobs:
+#   build-and-deploy:
+#     runs-on: 'ubuntu-latest'
+#     permissions:
+#       contents: 'read'
+#       id-token: 'write'
 
-    steps:
-      - id: 'checkout'
-        name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - id: 'checkout'
+#         name: Checkout code
+#         uses: actions/checkout@v4
 
-      - id: 'auth' 
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+#       - id: 'auth' 
+#         name: Authenticate to Google Cloud
+#         uses: google-github-actions/auth@v2
+#         with:
+#           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+#           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       
-      - id: 'configure-docker' 
-        name: Configure Docker
-        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+#       - id: 'configure-docker' 
+#         name: Configure Docker
+#         run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
 
-      - id: 'build-and-push-image'
-        name: Build and Push Docker Image
-        run: |          
-          export IMAGE_URI=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/preprocess-image:${{ github.sha }}
-          docker build -t $IMAGE_URI .
-          docker push $IMAGE_URI
-          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+#       - id: 'build-and-push-image'
+#         name: Build and Push Docker Image
+#         run: |          
+#           export IMAGE_URI=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/preprocess-image:${{ github.sha }}
+#           docker build -t $IMAGE_URI .
+#           docker push $IMAGE_URI
+#           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      - id: 'setup-gcloud'
-        name: Set up Cloud SDK
-        uses: 'google-github-actions/setup-gcloud@v2'
+#       - id: 'setup-gcloud'
+#         name: Set up Cloud SDK
+#         uses: 'google-github-actions/setup-gcloud@v2'
       
-      - id: 'setup-python'
-        name: 'Set up Python'
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10' 
+#       - id: 'setup-python'
+#         name: 'Set up Python'
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.10' 
       
-      - id: 'install-dependencies'
-        name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+#       - id: 'install-dependencies'
+#         name: Install dependencies
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
       
-      - id: 'compile-kbfp'
-        name: Compile Kubeflow Pipeline
-        env:
-           IMAGE_URI: ${{ env.IMAGE_URI }}
-        run: python -m pipelines.pipe-preprocess 
+#       - id: 'compile-kbfp'
+#         name: Compile Kubeflow Pipeline
+#         env:
+#            IMAGE_URI: ${{ env.IMAGE_URI }}
+#         run: python -m pipelines.pipe-preprocess 
         
-      - id: 'upload-pipeline'
-        name: Upload da pipeline para o Vertex AI
-        run: |
-          python pipelines/main.py \
-            --project ${{ env.GCP_PROJECT_ID }} \
-            --region ${{ env.GCP_REGION }} \
-            --pipeline-root ${{ env.PIPELINE_ROOT }} \
-            --service_account ${{ secrets.GCP_SERVICE_ACCOUNT }}
+#       - id: 'upload-pipeline'
+#         name: Upload da pipeline para o Vertex AI
+#         run: |
+#           python pipelines/main.py \
+#             --project ${{ env.GCP_PROJECT_ID }} \
+#             --region ${{ env.GCP_REGION }} \
+#             --pipeline-root ${{ env.PIPELINE_ROOT }} \
+#             --service_account ${{ secrets.GCP_SERVICE_ACCOUNT }}

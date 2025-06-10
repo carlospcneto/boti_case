@@ -46,7 +46,7 @@ def preprocess_pipe(
                 {'name': 'name', 'type': 'STRING', 'mode': 'REQUIRED'},
                 {'name': 'description', 'type': 'STRING', 'mode': 'NULLABLE'},
                 {'name': 'price', 'type': 'FLOAT', 'mode': 'REQUIRED'},
-                {'name': 'dt_refe', 'type': 'STRING', 'mode': 'REQUIRED'},
+                {'name': 'dt_refe', 'type': 'STRING', 'mode': 'REQUIRED'}
             ]
         }
     ]
