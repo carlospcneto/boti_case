@@ -30,8 +30,8 @@ jobs:
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/398112472826/locations/global/workloadIdentityPools/github-pool-identitys/providers/github'
-          service_account: 'service-cpcn@boti-project-cpcn.iam.gserviceaccount.com'
+          workload_identity_provider: $ {{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       
       - id: 'configure-docker' 
         name: Configure Docker
@@ -74,3 +74,4 @@ jobs:
             --project ${{ env.GCP_PROJECT_ID }} \
             --region ${{ env.GCP_REGION }} \
             --pipeline-root ${{ env.PIPELINE_ROOT }} \
+            --service_account ${{ secrets.GCP_SERVICE_ACCOUNT }}
