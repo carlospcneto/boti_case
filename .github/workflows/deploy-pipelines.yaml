@@ -1,8 +1,11 @@
-name: Deploy na GCP
+name: Deploy Kubeflow Pipelines to Google Cloud Vertex AI
 on:
   push:
     branches:
       - main
+    path:
+      - 'pipelines/**'
+      - 'components/**'
   workflow_dispatch:
 
 env:
@@ -62,18 +65,13 @@ jobs:
         name: Compile Kubeflow Pipeline
         env:
            IMAGE_URI: ${{ env.IMAGE_URI }}
-        run: python -m pipelines.pipe-preprocess
-
-      - name: Update gcloud components
-        run: gcloud components update      
+        run: python -m pipelines.pipe-preprocess 
         
-      - id: 'run-pipeline'
-        name: Run Kubeflow Pipeline
+      - id: 'upload-pipeline'
+        name: Upload da pipeline para o Vertex AI
         run: |
-          gcloud ai pipelines run \
-            --project=${{ env.GCP_PROJECT_ID }} \
-            --location=${{ env.GCP_REGION }} \
+          gcloud ai pipelines jobs submit \
+            --region ${{ env.GCP_REGION }} \
+            --project ${{ env.GCP_PROJECT_ID }} \
+            --pipeline-spec preprocess_pipe.yaml \
             --display-name=${{ env.PIPELINE_NAME }}-$(date +%Y%m%d%H%M%S) \
-            --pipeline-spec-path=preprocess_pipe.yaml \
-            --service-account=service-cpcn@boti-project-cpcn.iam.gserviceaccount.com \
-            --pipeline-root=${{ env.PIPELINE_ROOT }}
