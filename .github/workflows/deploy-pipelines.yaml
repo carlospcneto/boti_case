@@ -70,7 +70,7 @@ jobs:
       - id: 'upload-pipeline'
         name: Upload da pipeline para o Vertex AI
         run: |
-          gcloud ai pipelines jobs submit \
+          gcloud ai-platform jobs submit \
             --region ${{ env.GCP_REGION }} \
             --project ${{ env.GCP_PROJECT_ID }} \
             --pipeline-spec preprocess_pipe.yaml \
