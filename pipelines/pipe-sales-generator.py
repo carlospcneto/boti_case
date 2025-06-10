@@ -81,7 +81,10 @@ def main(argv=None):
                 topic='projects/boti-project-cpcn/topics/data_model')
             | 'DecodeModifierMsg' >> beam.Map(lambda msg: json.loads(msg.decode('utf-8')))
             | 'ConvertToMap' >> beam.Map(convert_data_model_to_map)
-            | 'WindowInto' >> beam.WindowInto(window.GlobalWindows())
+            | 'WindowIntoFixed' >> beam.WindowInto(
+                window.FixedWindows(60),  # Janelas de 60 segundos
+                trigger=beam.trigger.AfterWatermark(),
+                accumulation_mode=beam.trigger.AccumulationMode.DISCARDING)
             | 'GetLatestMap' >> beam.CombineGlobally(LatestCombineFn()).without_defaults()
         )
 
